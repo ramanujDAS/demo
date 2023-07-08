@@ -1,5 +1,7 @@
 package com.example.truecaller.model;
 
+import com.example.truecaller.exception.BadRequest;
+import com.example.truecaller.exception.WrongConfigurationException;
 import com.example.truecaller.util.UserCategory;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +10,8 @@ import lombok.ToString;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
+
+import static java.lang.Boolean.TRUE;
 
 @Getter
 @Setter
@@ -20,7 +24,7 @@ public abstract class User {
 
     private UserCategory userCategory;
     private Set<String> blockList;
-    private Set<Contacts> contactList;
+    private Set<Contact> contactList;
     private String HashedPassword;
     private PersonalInfo personalInfo;
     private BusinessInfo businessInfo;
@@ -31,9 +35,9 @@ public abstract class User {
 
     public abstract void addBusinessInfo(BusinessInfo businessInfo);
 
-    public abstract boolean addContact(Contacts contacts);
+    public abstract boolean addContact(Contact contacts);
 
-    public abstract boolean removeContact(Contacts contacts);
+    public abstract boolean removeContact(Contact contacts);
 
     public abstract boolean addBlockList(String mobileNo);
 
@@ -43,16 +47,47 @@ public abstract class User {
 
     public abstract boolean addGlobalSpam(String mobileNo);
 
-    public boolean upgradeUser() {
-        return Boolean.FALSE;
+    public boolean upgradeUser() throws BadRequest, WrongConfigurationException {
+
+        switch (this.userCategory) {
+            case HIGHER:
+                throw new BadRequest("user is already at HIGHER Category");
+            case MEDIUM:
+                setUserCategory(UserCategory.HIGHER);
+                break;
+            case NORMAL:
+                setUserCategory(UserCategory.MEDIUM);
+                break;
+            default:
+                throw new WrongConfigurationException("invalid user category upgrade");
+        }
+        return TRUE;
     }
 
-    public boolean importContacts(List<Contacts> contacts) {
-
-        return Boolean.FALSE;
+    public boolean importContacts(List<Contact> contacts) throws WrongConfigurationException {
+        checkLimit(contactList.size());
+        contactList.addAll(contacts);
+        return TRUE;
     }
 
-    ;
-
-
+    private boolean checkLimit(int currentSize) throws WrongConfigurationException {
+        if (this.userCategory.equals(UserCategory.NORMAL)) {
+            if (currentSize <= userCategory.getLimit()) {
+                return TRUE;
+            }
+            return Boolean.FALSE;
+        } else if (this.userCategory.equals(UserCategory.MEDIUM)) {
+            if (currentSize <= userCategory.getLimit()) {
+                return TRUE;
+            }
+            return Boolean.FALSE;
+        } else if (this.userCategory.equals(UserCategory.HIGHER)) {
+            if (currentSize <= userCategory.getLimit()) {
+                return TRUE;
+            }
+            return Boolean.FALSE;
+        } else {
+            throw new WrongConfigurationException("invalid user category");
+        }
+    }
 }
