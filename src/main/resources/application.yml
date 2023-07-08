@@ -5,3 +5,19 @@ netty:
   default:
     allocator:
       max-order: 3
+
+
+security:
+    enabled: true
+    endpoints:
+      login:
+        enabled: true
+        path: /demo/v1/user/login
+      oauth:
+        enabled: true
+        path: /demo/v1/user/oauth/access_token
+    token:
+      basic-auth:
+        enabled: true
+        username: ramanuj
+        password: ramanuj
