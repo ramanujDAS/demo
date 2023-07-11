@@ -2,14 +2,15 @@ package com.example.truecaller.model;
 
 import com.example.truecaller.exception.BadRequest;
 import com.example.truecaller.exception.WrongConfigurationException;
+import com.example.truecaller.repo.UserRepo;
 import com.example.truecaller.util.UserCategory;
+import jakarta.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static java.lang.Boolean.TRUE;
 
@@ -24,29 +25,46 @@ public abstract class User {
 
     private UserCategory userCategory;
     private Set<String> blockList;
-    private Set<Contact> contactList;
+    private List<Contact> contactList;
     private String HashedPassword;
     private PersonalInfo personalInfo;
     private BusinessInfo businessInfo;
+    @Inject
+    UserRepo userRepo;
 
-    public abstract void register(String customerName, String MobileNo);
+    public User(String customerName, String mobileNo) {
+        this.userName = customerName;
+        this.mobileNo = mobileNo;
+        contactList = new ArrayList<>();
+        blockList = new HashSet<>();
+        setUserCategory(UserCategory.NORMAL);
+    }
+
+    public void register() {
+        setId(UUID.randomUUID().toString());
+        setUserName(userName);
+        setMobileNo(mobileNo);
+        userRepo.register(this);
+    }
 
     public abstract void addPersonalInfo(PersonalInfo personalInfo);
 
     public abstract void addBusinessInfo(BusinessInfo businessInfo);
 
-    public abstract boolean addContact(Contact contacts);
+    public  boolean addContact(Contact contacts){
+        return contactList.add(contacts);
+    }
 
-    public abstract boolean removeContact(Contact contacts);
+    public  boolean removeContact(Contact contacts){
+       return contactList.remove(contacts);
+
+    }
 
     public abstract boolean addBlockList(String mobileNo);
 
     public abstract boolean removeBlocklist(String mobileNo);
 
     public abstract boolean canCall(String mobileNo);
-
-    public abstract boolean addGlobalSpam(String mobileNo);
-
     public boolean upgradeUser() throws BadRequest, WrongConfigurationException {
 
         switch (this.userCategory) {
