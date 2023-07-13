@@ -6,8 +6,7 @@ import lombok.Getter;
 import java.util.HashSet;
 import java.util.Set;
 
-@Singleton
-@Getter
+
 public class GlobalSpamList {
 
     private Set<String> spamSet = new HashSet<>();

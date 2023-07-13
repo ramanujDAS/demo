@@ -3,7 +3,7 @@ package com.example.truecaller.util;
 import com.example.truecaller.util.ContactLimit;
 import lombok.Getter;
 
-@Getter
+
 public enum UserCategory {
     NORMAL(ContactLimit.NORMAL),
     MEDIUM(ContactLimit.MIDIUM),
@@ -16,7 +16,7 @@ public enum UserCategory {
     }
 
 
-
-
-
+    public int getLimit() {
+        return limit;
+    }
 }

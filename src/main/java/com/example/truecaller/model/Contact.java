@@ -8,12 +8,33 @@ import lombok.ToString;
 import java.util.Objects;
 
 
-@Getter
-@Setter
-@ToString
-@Builder
 public class Contact {
     private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     private String phone;
     private String email;
 
@@ -24,4 +45,12 @@ public class Contact {
         return this.phone.equals(((Contact) obj).phone)||this.name.equals(((Contact) obj).name);
     }
 
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

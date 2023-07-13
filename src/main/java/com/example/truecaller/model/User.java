@@ -14,9 +14,7 @@ import java.util.*;
 
 import static java.lang.Boolean.TRUE;
 
-@Getter
-@Setter
-@ToString
+
 public abstract class User {
     @NotNull
     private String id;
@@ -29,7 +27,7 @@ public abstract class User {
     private String HashedPassword;
     private PersonalInfo personalInfo;
     private BusinessInfo businessInfo;
-    @Inject
+
     UserRepo userRepo;
 
     public User(String customerName, String mobileNo) {
@@ -37,13 +35,14 @@ public abstract class User {
         this.mobileNo = mobileNo;
         contactList = new ArrayList<>();
         blockList = new HashSet<>();
-        setUserCategory(UserCategory.NORMAL);
+        userRepo= new UserRepo();
+        this.userCategory=UserCategory.NORMAL;
     }
 
     public void register() {
-        setId(UUID.randomUUID().toString());
-        setUserName(userName);
-        setMobileNo(mobileNo);
+        this.id=(UUID.randomUUID().toString());
+        this.userName=(userName);
+        this.mobileNo=(mobileNo);
         userRepo.register(this);
     }
 
@@ -71,10 +70,10 @@ public abstract class User {
             case HIGHER:
                 throw new BadRequest("user is already at HIGHER Category");
             case MEDIUM:
-                setUserCategory(UserCategory.HIGHER);
+                this.userCategory=(UserCategory.HIGHER);
                 break;
             case NORMAL:
-                setUserCategory(UserCategory.MEDIUM);
+                this.userCategory=(UserCategory.MEDIUM);
                 break;
             default:
                 throw new WrongConfigurationException("invalid user category upgrade");
@@ -107,5 +106,101 @@ public abstract class User {
         } else {
             throw new WrongConfigurationException("invalid user category");
         }
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public UserCategory getUserCategory() {
+        return userCategory;
+    }
+
+    public void setUserCategory(UserCategory userCategory) {
+        this.userCategory = userCategory;
+    }
+
+    public Set<String> getBlockList() {
+        return blockList;
+    }
+
+    public void setBlockList(Set<String> blockList) {
+        this.blockList = blockList;
+    }
+
+    public void setContactList(List<Contact> contactList) {
+        this.contactList = contactList;
+    }
+
+    public String getHashedPassword() {
+        return HashedPassword;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        HashedPassword = hashedPassword;
+    }
+
+    public PersonalInfo getPersonalInfo() {
+        return personalInfo;
+    }
+
+    public void setPersonalInfo(PersonalInfo personalInfo) {
+        this.personalInfo = personalInfo;
+    }
+
+    public BusinessInfo getBusinessInfo() {
+        return businessInfo;
+    }
+
+    public UserRepo getUserRepo() {
+        return userRepo;
+    }
+
+    public void setUserRepo(UserRepo userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    public void setBusinessInfo(BusinessInfo businessInfo) {
+        this.businessInfo=businessInfo;
+    }
+
+    public List<Contact> getContactList() {
+        return contactList;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", userName='" + userName + '\'' +
+                ", mobileNo='" + mobileNo + '\'' +
+                ", userCategory=" + userCategory +
+                ", blockList=" + blockList +
+                ", contactList=" + contactList +
+                ", HashedPassword='" + HashedPassword + '\'' +
+                ", personalInfo=" + personalInfo +
+                ", businessInfo=" + businessInfo +
+                ", userRepo=" + userRepo +
+                '}';
     }
 }
