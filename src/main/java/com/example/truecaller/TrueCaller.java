@@ -21,6 +21,8 @@ public class TrueCaller {
     GlobalSpamList spamList;
 
     public  void startApplication() throws WrongConfigurationException, BadRequest, ParseException {
+
+
         /** Users should be able to register **/
         System.out.println("1.Users should be able to register");
 
@@ -48,7 +50,7 @@ public class TrueCaller {
         /** block contacts for user**/
         user1.addBlockList("9572912072");
         /**report spam to global list**/
-        spamList=new GlobalSpamList();
+        spamList=GlobalSpamList.getInstance();
         spamList.add("9572912072");
         /**unblock**/
         System.out.println(("phone  unblocked {}"+ user1.removeBlocklist("8274909956")));

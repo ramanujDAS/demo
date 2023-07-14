@@ -10,6 +10,18 @@ import java.util.Set;
 public class GlobalSpamList {
 
     private Set<String> spamSet = new HashSet<>();
+    private static GlobalSpamList spamList;
+
+    public static synchronized GlobalSpamList getInstance() {
+        if (spamList == null) {
+            return new GlobalSpamList();
+        }
+        return spamList;
+    }
+
+    private GlobalSpamList() {
+        spamSet = new HashSet<>();
+    }
 
     public boolean isSpam(String mobile) {
         return spamSet.contains(mobile);

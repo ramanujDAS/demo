@@ -1,7 +1,7 @@
 package com.example.truecaller;
 
 
-import com.example.truecaller.repo.TrieContacts;
+import com.example.truecaller.repo.GlobalContacts;
 import jakarta.inject.Singleton;
 import lombok.Getter;
 
@@ -15,7 +15,7 @@ import static java.lang.Boolean.TRUE;
 @Getter
 public class GlobalRepo {
     private Set<String> globalSpamList = new HashSet<>();
-    private TrieContacts globalTrieContacts = new TrieContacts();
+    private GlobalContacts globalTrieContacts = new GlobalContacts();
 
     public boolean addGlobalSpam(String mobileNo){
 

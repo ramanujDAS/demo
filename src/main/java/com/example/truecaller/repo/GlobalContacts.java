@@ -2,35 +2,41 @@ package com.example.truecaller.repo;
 
 import com.example.truecaller.model.Contact;
 import jakarta.inject.Singleton;
-import lombok.Getter;
+import orestes.bloomfilter.BloomFilter;
+import orestes.bloomfilter.FilterBuilder;
+import orestes.bloomfilter.cachesketch.ExpiringBloomFilterMemory;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import static java.lang.Boolean.FALSE;
 
 @Singleton
-public class TrieContacts {
+public class GlobalContacts {
 
     private Map<String, Contact> gloabContacts;
     private Map<String, String> globalContactWithMobile;
 
-    public TrieContacts() {
+    private BloomFilter<String>  bloomFilter;
+    public GlobalContacts() {
         gloabContacts = new HashMap<>();
         globalContactWithMobile= new HashMap<>();
+        bloomFilter= new FilterBuilder(1000000,.01).buildCountingBloomFilter();
     }
 
     public Contact getContactByName(String name) {
+        System.out.println("bloomFilter  ::"+name+" "+bloomFilter.contains(name));
         return gloabContacts.get(name);
     }
 
     public Contact getContactByMobile(String mobile) {
+        System.out.println("bloomFilter  ::"+mobile+" "+bloomFilter.contains(mobile));
         return gloabContacts.get(globalContactWithMobile.get(mobile));
     }
 
     public void addContact(Contact contact) {
+        bloomFilter.add(contact.getPhone());
+        bloomFilter.add(contact.getName());
         gloabContacts.put(contact.getName(), contact);
         globalContactWithMobile.put(contact.getPhone(), contact.getName());
     }
