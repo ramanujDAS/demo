@@ -28,7 +28,7 @@ public abstract class User {
     private PersonalInfo personalInfo;
     private BusinessInfo businessInfo;
 
-    UserRepo userRepo;
+    private UserRepo userRepo;
 
     public User(String customerName, String mobileNo) {
         this.userName = customerName;
@@ -94,7 +94,7 @@ public abstract class User {
             }
             return Boolean.FALSE;
         } else if (this.userCategory.equals(UserCategory.MEDIUM)) {
-            if (currentSize <= userCategory.getLimit()) {
+            if(currentSize <= userCategory.getLimit()) {
                 return TRUE;
             }
             return Boolean.FALSE;

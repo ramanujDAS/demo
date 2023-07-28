@@ -7,6 +7,8 @@ import com.example.truecaller.model.Contact;
 import com.example.truecaller.model.Customer;
 import com.example.truecaller.model.User;
 import com.example.truecaller.repo.GlobalSpamList;
+import com.example.truecaller.trie.NodeTrie;
+import com.example.truecaller.trie.Trie;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
@@ -81,6 +83,26 @@ public class TrueCaller {
             }
         }
         /**Users should be able to search from global directory*/
+
+        System.out.println("inssert data in TrieNcde");
+
+        NodeTrie rootNode= new NodeTrie('0');
+        Trie trieString = new Trie(rootNode);
+        List<String> list= new ArrayList<>();
+        list.add("Ramanuj");
+        list.add("Rama");
+        list.add("Anuj");
+        list.add("Shatabdi");
+        for(String name: list){
+
+            trieString.insert(name);
+        }
+
+        System.out.println("searching the word");
+
+        System.out.println(" searching Shatabdi...... "+trieString.search(list.get(3)));
+
+        System.out.println("prefix searching "+trieString.getWordWithPrefix("Ram").toString());
 
     }
 }
